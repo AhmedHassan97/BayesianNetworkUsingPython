@@ -1,6 +1,7 @@
 import random
 import numpy as np
 
+
 def P(var, evidence={}):
     "The probability distribution for P(variable | evidence), when all parent variables are known (in evidence)."
     row = tuple(evidence[parent] for parent in var.parents)
@@ -24,6 +25,8 @@ def sample(probdist):
         c += probdist[outcome]
         if r <= c:
             return outcome
+
+
 def globalize(mapping):
     "Given a {name: value} mapping, export all the names to the `globals()` namespace."
     globals().update(mapping)
@@ -57,13 +60,17 @@ def product(numbers):
     for x in numbers:
         result *= x
     return result
+
+
 def probability(p):
     """Return true with probability p."""
     rand = np.array([random.uniform(0.0, 1.0) for i in range(len(p))])
-    rand = rand/sum(rand)
+    rand = rand / sum(rand)
     labels = [k for k in p]
-    vals = np.array( [p[k] for k in labels])
-    return labels[np.argmax(vals*rand)]
+    vals = np.array([p[k] for k in labels])
+    return labels[np.argmax(vals * rand)]
+
+
 # probability({'win':0.34,'lose':0.295,'tie':0.295})
 def RepresentsInt(s):
     try:
@@ -71,9 +78,11 @@ def RepresentsInt(s):
         return True
     except ValueError:
         return False
+
+
 def to_int(e):
     e_int = e.copy()
     for i in e_int:
         if RepresentsInt(e_int[i]):
-            e_int.update({i:int(e_int[i])})
+            e_int.update({i: int(e_int[i])})
     return e_int

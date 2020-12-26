@@ -9,7 +9,6 @@ def markov_blanket_sample(X, e, bn):  # X=BC , e={AB: 'win', AC: 'lose', AQ: '1'
     X's parents, children, and children's parents."""
     Xnode = X
     Q = {}
-    #     print(Q(),"Q")
     for xi in variable_values(X):
         ei = extend(e, X, xi)
 
@@ -20,14 +19,15 @@ def markov_blanket_sample(X, e, bn):  # X=BC , e={AB: 'win', AC: 'lose', AQ: '1'
 
 
 def Gibbs(X, e, bn, N):
-    counts = {x: 0 for x in variable_values(X)}  # for example we have AB -> counts win tie lose
+    counts = {}
+    for x in variable_values(X):
+        counts[x] = 0
     Z = [var for var in bn.variables if var not in e]
     state = dict(e)
-    # random Initialization
     for Zi in Z:
         state[Zi] = random.choice(variable_values(Zi))
     for j in range(N):
-        for Zi in Z:  # non evidence variables
+        for Zi in Z:
             state[Zi] = markov_blanket_sample(Zi, state, bn)
             counts[state[X]] += 1
     return ProbDist(counts)
