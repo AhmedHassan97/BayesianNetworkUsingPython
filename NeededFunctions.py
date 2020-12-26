@@ -2,64 +2,67 @@ import random
 import numpy as np
 
 
-def P(var, evidence={}):
+def PGivenE(R_variable, evidence={}):
     "The probability distribution for P(variable | evidence), when all parent variables are known (in evidence)."
-    row = tuple(evidence[parent] for parent in var.parents)
-    return var.cpt[row]
+    row = tuple(evidence[parent] for parent in R_variable.parents)
+    return R_variable.cpt[row]
 
 
-def normalize(dist):
-    "Normalize a {key: value} distribution so values sum to 1.0. Mutates dist and returns it."
-    total = sum(dist.values())
-    for key in dist:
-        dist[key] = dist[key] / total
-        assert 0 <= dist[key] <= 1, "Probabilities must be between 0 and 1."
-    return dist
+def Normalize(distribution):
+    "Normalize distribution so values sum to 1.0."
+    sum = 0
+    for i in distribution.values():
+        sum += i
+    for element in distribution:
+        distribution[element] = distribution[element] / sum
+        assert 0 <= distribution[element] <= 1, "Probabilities is not between 0 and 1."
+    return distribution
 
 
-def sample(probdist):
-    "Randomly sample an outcome from a probability distribution."
-    r = random.random()  # r is a random point in the probability distribution
-    c = 0.0  # c is the cumulative probability of outcomes seen so far
-    for outcome in probdist:
-        c += probdist[outcome]
-        if r <= c:
-            return outcome
+def Sample(pd):
+    "Randomly sample from a probability distribution."
+    temp = 0.0
+    rand = random.random()
+    for i in pd:
+        temp += pd[i]
+        if rand <= temp:
+            return i
 
 
-def globalize(mapping):
-    "Given a {name: value} mapping, export all the names to the `globals()` namespace."
-    globals().update(mapping)
+def VariableDomain(variable):
+    """This function returns the domain of a variable for example in
+    our case if the random variable is AB then its domain will be {lose,win,tie}"""
+    domain = [i for i in variable.domain]
+    return domain
 
 
-def variable_values(var):
-    a = [k for k in var.domain]
-    return a
+def ChangeEvidence(evidence, variable, value):
+    """
+    Take the value, and change the Random variable to this value
+    take {AB:"win"} returns {AB:lose} for example
+    """
+    E_New = evidence.copy()
+    E_New[variable] = value
+    return E_New
 
 
-def prob(var, val, e):
-    return P(var, e)[val]
+def getChildren(var, ei, bn):
+    Children = []
+    for i in bn.variables:
+        if var in i.parents:
+            Children = [i]
+    for j in Children:
+        if j not in ei:
+            Children = [j]
+    return Children
 
 
-def extend(s, var, val):
-    """Copy the substitution s and extend it by setting var to val; return copy."""
-    s2 = s.copy()
-    s2[var] = val
-    return s2
-
-
-def children(var, ei, bn):
-    chldrn = [i for i in bn.variables if var in i.parents]
-    chldrn = [i for i in chldrn if i not in ei]
-    return chldrn
-
-
-def product(numbers):
-    """Return the product of the numbers, e.g. product([2, 3, 10]) == 60"""
-    result = 1
-    for x in numbers:
-        result *= x
-    return result
+def product(arr):
+    """product([2, 3, 10]) == 60"""
+    Multiplication = 1
+    for i in arr:
+        Multiplication = Multiplication * i
+    return Multiplication
 
 
 def probability(p):
@@ -67,22 +70,20 @@ def probability(p):
     rand = np.array([random.uniform(0.0, 1.0) for i in range(len(p))])
     rand = rand / sum(rand)
     labels = [k for k in p]
-    vals = np.array([p[k] for k in labels])
-    return labels[np.argmax(vals * rand)]
+    values = np.array([p[k] for k in labels])
+    return labels[np.argmax(values * rand)]
 
 
-# probability({'win':0.34,'lose':0.295,'tie':0.295})
-def RepresentsInt(s):
-    try:
-        int(s)
-        return True
-    except ValueError:
-        return False
+def INT_Casting(e):
+    NewE = e.copy()
+    for i in NewE:
+        try:
+            int(NewE[i])
+            NewE.update({i: int(NewE[i])})
+        except ValueError:
+            continue
+    return NewE
 
 
-def to_int(e):
-    e_int = e.copy()
-    for i in e_int:
-        if RepresentsInt(e_int[i]):
-            e_int.update({i: int(e_int[i])})
-    return e_int
+def removeSpace(string):
+    return string.replace(" ", "")
