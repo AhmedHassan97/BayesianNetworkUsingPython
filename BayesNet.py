@@ -65,3 +65,10 @@ class CPTable(dict):
             self[row] = ProbDist(dist)
 
 
+class Bool(int):
+    "Just like `bool`, except values display as 'T' and 'F' instead of 'True' and 'False'"
+    __str__ = __repr__ = lambda self: 'T' if self else 'F'
+
+
+T = Bool(True)
+F = Bool(False)

@@ -60,4 +60,4 @@ def Exact(BN):
                 lose += PAB_Win * PBC_Lose * PAC_Tie * factor
                 tie += PAB_Win * PBC_Tie * PAC_Tie * factor
 
-    print(win / (win + tie + lose), lose / (win + tie + lose), tie / (win + tie + lose))
+    print('Win', win / (win + tie + lose), 'Lose', lose / (win + tie + lose), 'Tie', tie / (win + tie + lose))
