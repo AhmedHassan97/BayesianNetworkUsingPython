@@ -6,16 +6,16 @@ class BayesNetwork(object):
     "Bayesian network: class used to build the network and include the method add that adds the nodes to the network "
 
     def __init__(self):
+        self.initialize = {}
         self.variables = []
-        self.lookup = {}
 
     def add(self, name, Pnames, cpt):
         """Adds a new Random Variable to the Network , it take the name of the random
           variable and its parents and the Parent names must have been added previously."""
-        parents = [self.lookup[name] for name in Pnames]
+        parents = [self.initialize[name] for name in Pnames]
         var = Variable(name, cpt, parents)
         self.variables.append(var)
-        self.lookup[name] = var
+        self.initialize[name] = var
         return self
 
 
@@ -50,7 +50,7 @@ class Given(dict):
 
 
 class CPTable(dict):
-    "A mapping of {row: PD, ...} where each row is a tuple of values of the parent variables."
+    " {row: PD, ...} where each row is a tuple of values of the parent variables."
 
     def __init__(self, mapping, parents=()):
         if len(parents) == 0 and not (isinstance(mapping, dict) and set(mapping.keys()) == {()}):
@@ -59,4 +59,3 @@ class CPTable(dict):
             if len(parents) == 1 and not isinstance(row, tuple):
                 row = (row,)
             self[row] = PD(dist)
-

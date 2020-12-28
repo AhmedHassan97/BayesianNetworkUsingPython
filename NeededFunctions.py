@@ -57,24 +57,17 @@ def getChildren(var, ei, bn):
     return Children
 
 
-def product(arr):
-    """product([2, 3, 10]) == 60"""
-    Multiplication = 1
-    for i in arr:
-        Multiplication = Multiplication * i
-    return Multiplication
-
-
 def probability(p):
     """Return true with probability p."""
     rand = np.array([random.uniform(0.0, 1.0) for i in range(len(p))])
     rand = rand / sum(rand)
-    labels = [k for k in p]
-    values = np.array([p[k] for k in labels])
-    return labels[np.argmax(values * rand)]
+    l = [i for i in p]
+    values = np.array([p[i] for i in l])
+    return l[np.argmax(values * rand)]
 
 
 def INT_Casting(e):
+    """some times the Given AQ or BQ for example became '0' so this change it again to 0"""
     NewE = e.copy()
     for i in NewE:
         try:

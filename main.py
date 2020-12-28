@@ -5,7 +5,7 @@ from NeededFunctions import *
 
 CPTable = {}
 NumberOfTeams = input("Please Enter the number of the teams:")
-NumberOfTeams=removeSpace(NumberOfTeams)
+NumberOfTeams = removeSpace(NumberOfTeams)
 while True:
     try:
         int(NumberOfTeams)
@@ -17,13 +17,13 @@ for Q1 in range(4):
     for Q2 in range(4):
         if Q1 > Q2:
             CPTable.update(
-                {(Q1, Q2): {"win": (1 / int(NumberOfTeams)) + (Q1 - Q2) * 0.1,
-                            "tie": (1 / int(NumberOfTeams)) - (Q1 - Q2) * 0.05,
-                            "lose": (1 / int(NumberOfTeams)) - (Q1 - Q2) * 0.05}})
+                {(Q1, Q2): {"win": (1 / 3) + (Q1 - Q2) * 0.1,
+                            "tie": (1 / 3) - (Q1 - Q2) * 0.05,
+                            "lose": (1 / 3) - (Q1 - Q2) * 0.05}})
         else:
-            CPTable.update({(Q1, Q2): {"win": (1 / int(NumberOfTeams)) + (Q1 - Q2) * 0.05,
-                                       "tie": (1 / int(NumberOfTeams)) + (Q1 - Q2) * 0.05,
-                                       "lose": (1 / int(NumberOfTeams)) - (Q1 - Q2) * 0.1}})
+            CPTable.update({(Q1, Q2): {"win": (1 / 3) + (Q1 - Q2) * 0.05,
+                                       "tie": (1 / 3) + (Q1 - Q2) * 0.05,
+                                       "lose": (1 / 3) - (Q1 - Q2) * 0.1}})
 
 # Enter the Team Qualites
 BN = BayesNetwork()
@@ -65,7 +65,7 @@ for i in range(int(NumberOfTeams)):
                 e[l] = result
 
 print(e)
-
+# -------------------------------------choose the Algorithms-------------
 Exact_OR_MCMC = input("Enter 0 for Exact and 1 for MCMC ")
 Exact_OR_MCMC=removeSpace(Exact_OR_MCMC)
 while Exact_OR_MCMC != "0" and Exact_OR_MCMC != "1":

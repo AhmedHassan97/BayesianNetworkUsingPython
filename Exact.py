@@ -2,6 +2,9 @@ from BayesNetwork import *
 
 
 def Exact(BN, e):
+    """ Calculates the exact inference by using variable elamination for only three teams,
+    this code is an implementation of the function i put it in the report, i first calculated the alpha'
+      then i calculated the probability of the last match"""
     POut = {}
     win = 0
     tie = 0
